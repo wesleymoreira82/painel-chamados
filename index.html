@@ -1,0 +1,1862 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guia Operacional — Liderança do Atendimento | Ana Paula</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    /* Search Highlight */
+    mark.search-highlight {
+      background-color: #fef08a;
+      color: #854d0e;
+      font-weight: 700;
+      padding: 0 3px;
+      border-radius: 4px;
+    }
+
+    /* Smooth Card Animation */
+    .ticket-card {
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .ticket-card:hover {
+      transform: translateY(-3px);
+    }
+
+    @media print {
+      .no-print {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-blue-600 selection:text-white">
+
+  <!-- TOP HEADER -->
+  <header class="bg-slate-900 text-white sticky top-0 z-40 shadow-lg border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        
+        <!-- Brand & Title -->
+        <div class="flex items-start sm:items-center gap-3.5">
+          <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-md shrink-0">
+            <i data-lucide="headphones" class="w-6 h-6 text-white"></i>
+          </div>
+          <div>
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/30">
+                Guia Operacional Interativo
+              </span>
+              <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 flex items-center gap-1">
+                <i data-lucide="user-check" class="w-3.5 h-3.5"></i>
+                Responsável: Ana Paula
+              </span>
+            </div>
+            <h1 class="text-lg sm:text-xl font-extrabold tracking-tight text-white mt-0.5">
+              Liderança do Atendimento — Rotina & Encaminhamentos
+            </h1>
+          </div>
+        </div>
+
+        <!-- Quick Actions & Routine Progress -->
+        <div class="flex flex-wrap items-center gap-2.5 no-print">
+          <!-- Mini Routine Progress Pill -->
+          <button onclick="switchTab('rotina')" class="flex items-center gap-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 px-3.5 py-2 rounded-xl text-xs font-medium transition-colors" title="Ver Checklist da Rotina Diária">
+            <div class="flex items-center gap-1.5">
+              <i data-lucide="check-square" class="w-4 h-4 text-emerald-400"></i>
+              <span class="text-slate-300">Rotina do Dia:</span>
+              <span id="headerProgressText" class="font-bold text-white">0/11</span>
+            </div>
+            <div class="w-16 h-2 bg-slate-950 rounded-full overflow-hidden">
+              <div id="headerProgressBar" class="h-full bg-emerald-500 transition-all duration-300" style="width: 0%"></div>
+            </div>
+          </button>
+
+          <!-- Shopify Rule Alert Shortcut -->
+          <button onclick="openShopifyModal()" class="flex items-center gap-1.5 bg-red-600/90 hover:bg-red-600 text-white px-3.5 py-2 rounded-xl text-xs font-bold shadow-sm transition-all">
+            <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+            <span>Regra Shopify</span>
+          </button>
+
+          <!-- Vercel Help Shortcut -->
+          <button onclick="openVercelModal()" class="flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-3 py-2 rounded-xl text-xs font-medium transition-all" title="Como colocar no ar na Vercel">
+            <i data-lucide="cloud-upload" class="w-4 h-4 text-blue-400"></i>
+            <span class="hidden sm:inline">Hospedar na Vercel</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="flex items-center gap-1.5 mt-4 pt-2 border-t border-slate-800/80 overflow-x-auto no-print">
+        <button onclick="switchTab('busca')" id="tab-btn-busca" class="tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all whitespace-nowrap bg-blue-600 text-white shadow-sm">
+          <i data-lucide="search" class="w-4 h-4"></i>
+          <span>Busca Rápida & Encaminhamentos</span>
+        </button>
+        <button onclick="switchTab('reembolsos')" id="tab-btn-reembolsos" class="tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap text-slate-300 hover:text-white hover:bg-slate-800">
+          <i data-lucide="scale" class="w-4 h-4 text-amber-400"></i>
+          <span>3 Tipos de Reembolso</span>
+          <span class="px-1.5 py-0.2 bg-amber-500/20 text-amber-300 border border-amber-400/30 rounded text-[10px] font-bold">ATENÇÃO</span>
+        </button>
+        <button onclick="switchTab('rotina')" id="tab-btn-rotina" class="tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap text-slate-300 hover:text-white hover:bg-slate-800">
+          <i data-lucide="sun" class="w-4 h-4 text-yellow-400"></i>
+          <span>Rotina Diária & Regra Shopify</span>
+        </button>
+        <button onclick="switchTab('guia')" id="tab-btn-guia" class="tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap text-slate-300 hover:text-white hover:bg-slate-800">
+          <i data-lucide="book-open" class="w-4 h-4 text-purple-400"></i>
+          <span>Guia Completo & Tabela Resumo</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT AREA -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <!-- ===================================================================== -->
+    <!-- TAB 1: BUSCA RÁPIDA & ENCAMINHAMENTOS (DEFAULT VIEW)                  -->
+    <!-- ===================================================================== -->
+    <section id="tab-busca" class="space-y-6">
+
+      <!-- Objective Welcome Banner -->
+      <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="flex items-start gap-3.5">
+          <div class="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200 text-blue-600 flex items-center justify-center shrink-0 mt-0.5">
+            <i data-lucide="compass" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h2 class="text-sm sm:text-base font-bold text-slate-900">
+              1. Objetivo do Guia Operacional (Responsável: Ana Paula)
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-600 mt-0.5 leading-relaxed">
+              Orientar a liderança do atendimento garantindo a continuidade das atividades, a distribuição equilibrada de tickets, o registro obrigatório na <strong>Shopify</strong> e o encaminhamento rápido de cada solicitação para o <strong>grupo correto identificado por cor</strong>.
+            </p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <button onclick="switchTab('rotina')" class="text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 px-3.5 py-2 rounded-xl transition-colors flex items-center gap-1.5">
+            <i data-lucide="list-checks" class="w-4 h-4"></i>
+            Abrir Checklist da Manhã
+          </button>
+        </div>
+      </div>
+
+      <!-- COLOR LEGEND & GROUP FILTER -->
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+          <div>
+            <h3 class="text-sm sm:text-base font-extrabold text-slate-900 flex items-center gap-2">
+              <i data-lucide="palette" class="w-5 h-5 text-blue-600"></i>
+              <span>Legenda dos 5 Grupos de Encaminhamento (Clique para filtrar)</span>
+            </h3>
+            <p class="text-xs text-slate-500 mt-0.5">
+              A cor de cada grupo abaixo é a mesma utilizada nos cards de chamados e nas tabelas para identificação visual imediata.
+            </p>
+          </div>
+          <button id="btnResetGroupFilter" onclick="filterByGroup('ALL')" class="hidden text-xs font-bold px-3 py-1.5 rounded-lg bg-slate-900 text-white hover:bg-slate-800 transition-all items-center gap-1.5 self-start sm:self-auto">
+            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+            <span>Mostrar Todos os Grupos</span>
+          </button>
+        </div>
+
+        <!-- 5 Groups Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3" id="groupLegendContainer">
+          <!-- Populated dynamically via JS for exact consistency -->
+        </div>
+      </div>
+
+      <!-- SUPER SEARCH BOX & QUICK TAGS -->
+      <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 rounded-2xl p-5 sm:p-6 text-white shadow-lg border border-slate-700">
+        <div class="max-w-3xl mx-auto">
+          <label for="searchInput" class="block text-xs sm:text-sm font-bold uppercase tracking-wider text-blue-300 mb-2 flex items-center gap-2">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+            <span>Super Busca do Atendimento — Para onde devo mandar?</span>
+          </label>
+          <div class="relative">
+            <i data-lucide="search" class="w-6 h-6 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+            <input
+              id="searchInput"
+              type="text"
+              placeholder="Busque por termo: reembolso, pix, cartão, rastreio, endereço, omni, IA, boleto, atacado, doe, app..."
+              class="w-full pl-12 pr-28 py-4 rounded-xl bg-white text-slate-900 placeholder-slate-400 font-medium text-sm sm:text-base focus:outline-none focus:ring-4 focus:ring-blue-500/40 shadow-inner"
+              autocomplete="off"
+            />
+            <button
+              id="clearSearchBtn"
+              onclick="clearSearch()"
+              class="hidden absolute right-3 top-1/2 -translate-y-1/2 bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold px-3 py-1.5 rounded-lg transition-colors items-center gap-1"
+            >
+              <i data-lucide="x" class="w-3.5 h-3.5"></i>
+              Limpar
+            </button>
+          </div>
+
+          <!-- Quick Filter Pills -->
+          <div class="mt-3.5 flex flex-wrap items-center gap-1.5">
+            <span class="text-xs text-slate-400 font-medium mr-1">Atalhos rápidos:</span>
+            <button onclick="quickSearch('reembolso')" class="text-xs bg-white/10 hover:bg-white/20 text-white px-2.5 py-1 rounded-lg border border-white/15 transition-colors">
+              💸 Reembolsos (Todos)
+            </button>
+            <button onclick="quickSearch('rastreio')" class="text-xs bg-blue-500/20 hover:bg-blue-500/30 text-blue-200 px-2.5 py-1 rounded-lg border border-blue-400/30 transition-colors">
+              📦 Rastreio / Entrega
+            </button>
+            <button onclick="quickSearch('endereço')" class="text-xs bg-blue-500/20 hover:bg-blue-500/30 text-blue-200 px-2.5 py-1 rounded-lg border border-blue-400/30 transition-colors">
+              📍 Endereço
+            </button>
+            <button onclick="quickSearch('doação')" class="text-xs bg-purple-500/20 hover:bg-purple-500/30 text-purple-200 px-2.5 py-1 rounded-lg border border-purple-400/30 transition-colors">
+              💜 Doação / PIX
+            </button>
+            <button onclick="quickSearch('boleto')" class="text-xs bg-purple-500/20 hover:bg-purple-500/30 text-purple-200 px-2.5 py-1 rounded-lg border border-purple-400/30 transition-colors">
+              📄 E-mail sem clareza / Boleto
+            </button>
+            <button onclick="quickSearch('atacado')" class="text-xs bg-purple-500/20 hover:bg-purple-500/30 text-purple-200 px-2.5 py-1 rounded-lg border border-purple-400/30 transition-colors">
+              🤝 Parceria / Atacado
+            </button>
+            <button onclick="quickSearch('IA')" class="text-xs bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-200 px-2.5 py-1 rounded-lg border border-emerald-400/30 transition-colors">
+              🤖 Problemas IA
+            </button>
+            <button onclick="quickSearch('OMNI')" class="text-xs bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 px-2.5 py-1 rounded-lg border border-amber-400/30 transition-colors">
+              💻 Plataforma OMNI
+            </button>
+            <button onclick="quickSearch('DOE')" class="text-xs bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 px-2.5 py-1 rounded-lg border border-rose-400/30 transition-colors">
+              🏛️ DOE / App / Site
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUICK ALERT: THE 3 REFUNDS DISTINCTION -->
+      <div class="bg-amber-50/90 border-2 border-amber-300 rounded-2xl p-4 sm:p-5 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg bg-amber-500 text-white flex items-center justify-center shrink-0">
+              <i data-lucide="alert-octagon" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h3 class="text-sm sm:text-base font-extrabold text-amber-950">
+                12. ATENÇÃO À DIFERENÇA ENTRE OS 3 REEMBOLSOS (Não confundir!)
+              </h3>
+              <p class="text-xs text-amber-800">
+                Cada solicitação de reembolso possui um direcionamento diferente conforme a origem do pagamento:
+              </p>
+            </div>
+          </div>
+          <button onclick="switchTab('reembolsos')" class="text-xs font-bold text-amber-900 bg-amber-200/80 hover:bg-amber-300 px-3 py-1.5 rounded-lg transition-colors self-start sm:self-auto shrink-0">
+            Ver Detalhes dos Reembolsos &rarr;
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <!-- Refund 1: Store -->
+          <div class="bg-blue-50 border-2 border-blue-500 rounded-xl p-3.5 flex flex-col justify-between">
+            <div>
+              <span class="inline-flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-blue-600 text-white">
+                <i data-lucide="shopping-bag" class="w-3 h-3"></i> 1. Compra na Loja
+              </span>
+              <p class="text-sm font-bold text-slate-900 mt-2">
+                Cliente quer reembolso de uma <span class="underline decoration-blue-500">compra realizada na loja</span>
+              </p>
+            </div>
+            <div class="mt-3 pt-2 border-t border-blue-200 flex items-center justify-between">
+              <span class="text-xs text-blue-900 font-medium">Encaminhar para:</span>
+              <span class="text-xs font-extrabold text-blue-700 bg-blue-100 px-2.5 py-1 rounded-lg border border-blue-300">
+                LIDERANÇA (Azul)
+              </span>
+            </div>
+          </div>
+
+          <!-- Refund 2: PIX Donation -->
+          <div class="bg-purple-50 border-2 border-purple-500 rounded-xl p-3.5 flex flex-col justify-between">
+            <div>
+              <span class="inline-flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-purple-600 text-white">
+                <i data-lucide="qr-code" class="w-3 h-3"></i> 2. Doação via PIX
+              </span>
+              <p class="text-sm font-bold text-slate-900 mt-2">
+                Pessoa quer reembolso de uma <span class="underline decoration-purple-500">doação feita via PIX</span>
+              </p>
+              <p class="text-[11px] text-purple-800 mt-1 font-medium">
+                *Pedir: Comprovante + Nome do titular + CPF
+              </p>
+            </div>
+            <div class="mt-3 pt-2 border-t border-purple-200 flex items-center justify-between">
+              <span class="text-xs text-purple-900 font-medium">Encaminhar para:</span>
+              <span class="text-xs font-extrabold text-purple-700 bg-purple-100 px-2.5 py-1 rounded-lg border border-purple-300">
+                COORDENAÇÃO (Roxo)
+              </span>
+            </div>
+          </div>
+
+          <!-- Refund 3: Credit Card Donation -->
+          <div class="bg-rose-50 border-2 border-rose-500 rounded-xl p-3.5 flex flex-col justify-between">
+            <div>
+              <span class="inline-flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-rose-600 text-white">
+                <i data-lucide="credit-card" class="w-3 h-3"></i> 3. Doação no Cartão
+              </span>
+              <p class="text-sm font-bold text-slate-900 mt-2">
+                Pessoa quer reembolso de uma <span class="underline decoration-rose-500">doação feita no Cartão de Crédito</span>
+              </p>
+            </div>
+            <div class="mt-3 pt-2 border-t border-rose-200 flex items-center justify-between">
+              <span class="text-xs text-rose-900 font-medium">Encaminhar para:</span>
+              <span class="text-xs font-extrabold text-rose-700 bg-rose-100 px-2.5 py-1 rounded-lg border border-rose-300">
+                PROBLEMAS IDENTIFICADOS
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESULTS STATUS BAR -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2">
+        <div class="flex items-center gap-2">
+          <h3 class="text-base sm:text-lg font-extrabold text-slate-900">
+            Catálogo de Chamados e Encaminhamentos
+          </h3>
+          <span id="resultsCounterBadge" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-slate-200 text-slate-800">
+            Carregando...
+          </span>
+        </div>
+        <div class="text-xs text-slate-500 flex items-center gap-1.5">
+          <i data-lucide="info" class="w-4 h-4 text-blue-600"></i>
+          <span>A cor da borda e do selo de cada chamado corresponde exatamente à cor do seu Grupo.</span>
+        </div>
+      </div>
+
+      <!-- TICKETS CARDS GRID -->
+      <div id="ticketsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Rendered via JS -->
+      </div>
+
+      <!-- Empty State when Search has no results -->
+      <div id="emptySearchState" class="hidden bg-white rounded-2xl p-10 text-center border border-slate-200 shadow-sm">
+        <div class="w-14 h-14 rounded-2xl bg-slate-100 text-slate-500 flex items-center justify-center mx-auto mb-3">
+          <i data-lucide="search-x" class="w-7 h-7"></i>
+        </div>
+        <h4 class="text-base font-bold text-slate-900">Nenhuma situação encontrada para essa busca</h4>
+        <p class="text-xs sm:text-sm text-slate-600 max-w-md mx-auto mt-1">
+          Lembre-se da regra da Seção 13: <em>"Quando uma situação não estiver contemplada neste guia ou houver dúvida sobre como proceder, buscar orientação antes de tomar uma decisão."</em>
+        </p>
+        <button onclick="clearSearch()" class="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors">
+          <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+          Mostrar Todos os Chamados
+        </button>
+      </div>
+
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- TAB 2: COMPARATIVO DE REEMBOLSOS (DESTAQUE ESPECIAL)                  -->
+    <!-- ===================================================================== -->
+    <section id="tab-reembolsos" class="hidden space-y-6">
+      <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-slate-200">
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-md bg-amber-100 text-amber-800 border border-amber-300">
+              Seção 12 — Ponto Crítico de Atenção
+            </span>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 mt-2">
+              Diferença entre os 3 Tipos de Reembolso + Caso Especial
+            </h2>
+            <p class="text-sm text-slate-600 mt-1">
+              Essa distinção é especialmente importante para evitar encaminhamentos incorretos. Verifique sempre se é <strong>Compra da Loja</strong> ou <strong>Doação</strong>, e qual foi o <strong>Meio de Pagamento</strong>.
+            </p>
+          </div>
+          <button onclick="switchTab('busca')" class="self-start md:self-auto text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 px-3.5 py-2 rounded-xl transition-colors flex items-center gap-1.5">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+            Voltar para a Busca
+          </button>
+        </div>
+
+        <!-- Interactive Decision Assistant -->
+        <div class="mt-6 bg-slate-900 text-white rounded-2xl p-5 border border-slate-800">
+          <h3 class="text-sm font-bold text-blue-300 uppercase tracking-wider flex items-center gap-2">
+            <i data-lucide="help-circle" class="w-4 h-4"></i>
+            Assistente Rápido: Qual é a situação do cliente? (Clique na opção)
+          </h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-3">
+            <button onclick="highlightRefundBox('box-ref-loja')" class="text-left p-3.5 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 border border-blue-400/40 transition-all">
+              <div class="text-xs font-bold text-blue-300">Caso 1</div>
+              <div class="text-sm font-extrabold text-white mt-0.5">Comprou produto na Loja e quer reembolso</div>
+            </button>
+            <button onclick="highlightRefundBox('box-ref-pix')" class="text-left p-3.5 rounded-xl bg-purple-600/20 hover:bg-purple-600/30 border border-purple-400/40 transition-all">
+              <div class="text-xs font-bold text-purple-300">Caso 2</div>
+              <div class="text-sm font-extrabold text-white mt-0.5">Fez Doação via PIX e quer reembolso</div>
+            </button>
+            <button onclick="highlightRefundBox('box-ref-cartao')" class="text-left p-3.5 rounded-xl bg-rose-600/20 hover:bg-rose-600/30 border border-rose-400/40 transition-all">
+              <div class="text-xs font-bold text-rose-300">Caso 3</div>
+              <div class="text-sm font-extrabold text-white mt-0.5">Fez Doação no Cartão de Crédito e quer reembolso</div>
+            </button>
+            <button onclick="highlightRefundBox('box-ref-engano')" class="text-left p-3.5 rounded-xl bg-purple-600/20 hover:bg-purple-600/30 border border-purple-400/40 transition-all">
+              <div class="text-xs font-bold text-purple-300">Caso 4 (Seção 7.5)</div>
+              <div class="text-sm font-extrabold text-white mt-0.5">Queria comprar produto, mas enviou como Doação</div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Detailed Cards Comparison -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-6">
+          
+          <!-- 1. Reembolso Compra da Loja -->
+          <div id="box-ref-loja" class="rounded-2xl border-2 border-blue-500 bg-blue-50/60 p-5 flex flex-col justify-between transition-all">
+            <div>
+              <div class="flex items-center justify-between gap-2 flex-wrap">
+                <span class="px-3 py-1 rounded-full text-xs font-extrabold bg-blue-600 text-white flex items-center gap-1.5">
+                  <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i>
+                  GRUPO: LIDERANÇA (AZUL)
+                </span>
+                <span class="text-xs font-bold text-blue-800">Seções 6 e 12</span>
+              </div>
+              <h4 class="text-lg font-extrabold text-slate-900 mt-3">
+                1. Cliente quer reembolso de uma COMPRA realizada na loja
+              </h4>
+              <p class="text-xs sm:text-sm text-slate-700 mt-1">
+                Qualquer reembolso referente a pedidos e compras de produtos na loja virtual deve ser encaminhado para a <strong>Liderança</strong>.
+              </p>
+              <div class="mt-4 bg-white rounded-xl p-3.5 border border-blue-200 space-y-2 text-xs text-slate-700">
+                <div class="font-bold text-slate-900 flex items-center gap-1.5">
+                  <i data-lucide="check-circle-2" class="w-4 h-4 text-blue-600"></i>
+                  O que verificar antes de encaminhar:
+                </div>
+                <ul class="list-disc list-inside space-y-1">
+                  <li>Verificar obrigatoriamente se o atendente registrou o comentário e o histórico nas <strong>observações do pedido na Shopify</strong>.</li>
+                  <li>Se não tiver comentário na Shopify, mudar status na planilha para <strong>ATENÇÃO</strong> (linha vermelha) e cobrar o atendente.</li>
+                  <li>A Isabella Maia participa do grupo Liderança e poderá contribuir na resolução.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Reembolso Doação via PIX -->
+          <div id="box-ref-pix" class="rounded-2xl border-2 border-purple-500 bg-purple-50/60 p-5 flex flex-col justify-between transition-all">
+            <div>
+              <div class="flex items-center justify-between gap-2 flex-wrap">
+                <span class="px-3 py-1 rounded-full text-xs font-extrabold bg-purple-600 text-white flex items-center gap-1.5">
+                  <i data-lucide="qr-code" class="w-3.5 h-3.5"></i>
+                  GRUPO: COORDENAÇÃO (ROXO)
+                </span>
+                <span class="text-xs font-bold text-purple-800">Seções 7.2 e 12</span>
+              </div>
+              <h4 class="text-lg font-extrabold text-slate-900 mt-3">
+                2. Pessoa quer reembolso de uma DOAÇÃO feita via PIX
+              </h4>
+              <p class="text-xs sm:text-sm text-slate-700 mt-1">
+                Quando a pessoa realizou uma doação via PIX e solicita a devolução do valor, o caso vai para a <strong>Coordenação (Sr. Genésio Filho)</strong>.
+              </p>
+              <div class="mt-4 bg-white rounded-xl p-3.5 border border-purple-200 space-y-2 text-xs text-slate-700">
+                <div class="font-bold text-slate-900 flex items-center gap-1.5">
+                  <i data-lucide="clipboard-check" class="w-4 h-4 text-purple-600"></i>
+                  O que solicitar obrigatoriamente antes de encaminhar:
+                </div>
+                <ol class="list-decimal list-inside space-y-1 font-semibold text-purple-950">
+                  <li>Comprovante da transação.</li>
+                  <li>Nome do titular.</li>
+                  <li>CPF do titular.</li>
+                </ol>
+                <p class="text-[11px] text-slate-500 pt-1">
+                  Depois de reunir esses 3 itens, encaminhar a solicitação para o grupo Coordenação.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Reembolso Doação no Cartão de Crédito -->
+          <div id="box-ref-cartao" class="rounded-2xl border-2 border-rose-500 bg-rose-50/60 p-5 flex flex-col justify-between transition-all">
+            <div>
+              <div class="flex items-center justify-between gap-2 flex-wrap">
+                <span class="px-3 py-1 rounded-full text-xs font-extrabold bg-rose-600 text-white flex items-center gap-1.5">
+                  <i data-lucide="credit-card" class="w-3.5 h-3.5"></i>
+                  GRUPO: PROBLEMAS IDENTIFICADOS PELO ATENDIMENTO (ROSA/VERMELHO)
+                </span>
+                <span class="text-xs font-bold text-rose-800">Seções 10.4 e 12</span>
+              </div>
+              <h4 class="text-lg font-extrabold text-slate-900 mt-3">
+                3. Pessoa quer reembolso de uma DOAÇÃO feita no CARTÃO DE CRÉDITO
+              </h4>
+              <p class="text-xs sm:text-sm text-slate-700 mt-1">
+                As solicitações de reembolso de doações feitas por cartão de crédito devem ser encaminhadas para o grupo <strong>Problemas identificados pelo atendimento</strong>.
+              </p>
+              <div class="mt-4 bg-white rounded-xl p-3.5 border border-rose-200 space-y-2 text-xs text-slate-700">
+                <div class="font-bold text-rose-900 flex items-center gap-1.5">
+                  <i data-lucide="alert-triangle" class="w-4 h-4 text-rose-600"></i>
+                  Atenção redobrada:
+                </div>
+                <p>
+                  Não confundir com reembolsos de compras da loja (que vão para <em>Liderança</em>) nem com doações via PIX (que vão para <em>Coordenação</em>).
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Queria comprar produto mas enviou como doação -->
+          <div id="box-ref-engano" class="rounded-2xl border-2 border-purple-500 bg-purple-50/60 p-5 flex flex-col justify-between transition-all">
+            <div>
+              <div class="flex items-center justify-between gap-2 flex-wrap">
+                <span class="px-3 py-1 rounded-full text-xs font-extrabold bg-purple-600 text-white flex items-center gap-1.5">
+                  <i data-lucide="repeat" class="w-3.5 h-3.5"></i>
+                  GRUPO: COORDENAÇÃO (ROXO)
+                </span>
+                <span class="text-xs font-bold text-purple-800">Seção 7.5</span>
+              </div>
+              <h4 class="text-lg font-extrabold text-slate-900 mt-3">
+                4. Pessoa que queria comprar um produto, mas enviou o valor como DOAÇÃO
+              </h4>
+              <p class="text-xs sm:text-sm text-slate-700 mt-1">
+                Pode acontecer de uma pessoa querer comprar um produto da loja, mas acabar enviando o dinheiro como doação.
+              </p>
+              <div class="mt-4 bg-white rounded-xl p-3.5 border border-purple-200 space-y-2 text-xs text-slate-700">
+                <div class="font-bold text-slate-900 flex items-center gap-1.5">
+                  <i data-lucide="list-ordered" class="w-4 h-4 text-purple-600"></i>
+                  Passo a passo nessa situação:
+                </div>
+                <ol class="list-decimal list-inside space-y-1 font-semibold text-purple-950">
+                  <li>Solicitar o nome e o CPF da pessoa.</li>
+                  <li>Solicitar o comprovante da transação.</li>
+                  <li>Encaminhar o caso para a <strong>Coordenação</strong>.</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- TAB 3: ROTINA DIÁRIA INTERATIVA & REGRA OBRIGATÓRIA SHOPIFY           -->
+    <!-- ===================================================================== -->
+    <section id="tab-rotina" class="hidden space-y-6">
+
+      <!-- Routine Top Header & Reset -->
+      <div class="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <span class="text-xs font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-md bg-blue-100 text-blue-800">
+            Parte 1 — Rotina Diária da Ana Paula
+          </span>
+          <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 mt-2">
+            Checklist Operacional do Dia & Regra da Shopify
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-600 mt-0.5">
+            Marque as etapas abaixo conforme realiza a rotina ao chegar e ao longo do dia. O progresso fica salvo automaticamente no seu navegador.
+          </p>
+        </div>
+        <div class="flex items-center gap-2 self-start sm:self-auto">
+          <button onclick="resetRoutineChecklist()" class="text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-300 px-3.5 py-2 rounded-xl transition-colors flex items-center gap-1.5">
+            <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+            Reiniciar Checklist para Novo Dia
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Left Column: Step-by-Step Interactive Checklist (7 cols) -->
+        <div class="lg:col-span-7 space-y-5">
+
+          <!-- STEP 2.1: Tickets da IA -->
+          <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+            <div class="flex items-start justify-between gap-3 mb-3">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-blue-600 text-white font-extrabold flex items-center justify-center text-sm shrink-0">
+                  2.1
+                </div>
+                <div>
+                  <h3 class="text-base font-extrabold text-slate-900">
+                    Primeira Atividade do Dia: Distribuir os Tickets da IA
+                  </h3>
+                  <p class="text-xs text-slate-500">
+                    Assim que chegar e iniciar as atividades — Etapa 1 da distribuição equilibrada
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="space-y-2.5 mt-4" id="checklist-2-1">
+              <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors">
+                <input type="checkbox" data-step="ia-1" onchange="toggleChecklistItem(this)" class="routine-check mt-0.5 w-4 h-4 rounded text-blue-600 focus:ring-blue-500" />
+                <span class="text-xs sm:text-sm text-slate-800"><strong>1.</strong> Acessar a pasta da <strong>IA</strong>.</span>
+              </label>
+              <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors">
+                <input type="checkbox" data-step="ia-2" onchange="toggleChecklistItem(this)" class="routine-check mt-0.5 w-4 h-4 rounded text-blue-600 focus:ring-blue-500" />
+                <span class="text-xs sm:text-sm text-slate-800"><strong>2.</strong> Selecionar todos os tickets que estão nessa pasta.</span>
+              </label>
+              <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors">
+                <input type="checkbox" data-step="ia-3" onchange="toggleChecklistItem(this)" class="routine-check mt-0.5 w-4 h-4 rounded text-blue-600 focus:ring-blue-500" />
+                <span class="text-xs sm:text-sm text-slate-800"><strong>3.</strong> Reabrir os tickets selecionados.</span>
+              </label>
+              <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors">
+                <input type="checkbox" data-step="ia-4" onchange="toggleChecklistItem(this)" class="routine-check mt-0.5 w-4 h-4 rounded text-blue-600 focus:ring-blue-500" />
+                <span class="text-xs sm:text-sm text-slate-800"><strong>4 e 5.</strong> Retirar a atribuição da IA, deixando os tickets sem responsável (eles serão direcionados automaticamente para a pasta <strong>Não atribuídos</strong>).</span>
+              </label>
+              <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors">
+                <input type="checkbox" data-step="ia-5" onchange="toggleChecklistItem(this)" class="routine-check mt-0.5 w-4 h-4 rounded text-blue-600 focus:ring-blue-500" />
+                <span class="text-xs sm:text-sm text-slate-800"><strong>6.</strong> Acessar a pasta <strong>Não atribuídos</strong> e distribuir os tickets entre os atendentes, procurando manter uma divisão equilibrada.</span>
+              </label>
+            </div>
+
+            <div class="mt-3.5 bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-900 flex items-start gap-2">
+              <i data-lucide="alert-circle" class="w-4 h-4 text-amber-600 shrink-0 mt-0.5"></i>
+              <span><strong>Atenção:</strong> O objetivo é que os tickets da IA sejam redistribuídos entre os atendentes, evitando que fiquem acumulados sem responsável.</span>
+            </div>
+          </div>
+
+          <!-- STEP 2.2: Reabrir tickets pendentes -->
+          <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+            <div class="flex items-center gap-3 mb-3">
+              <div class="w-9 h-9 rounded-xl bg-indigo-600 text-white font-extrabold flex items-center justify-center text-sm shrink-0">
+                2.2
+              </div>
+              <div>
+                <h3 class="text-base font-extrabold text-slate-900">
+                  Reabrir os Tickets Pendentes
+                </h3>
+                <p class="text-xs text-slate-500">
+                  Logo depois de distribuir os tickets da IA
+                </p>
+              </div>
+            </div>
+
+            <div class="space-y-2.5 mt-4">
+              <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors">
+                <input type="checkbox" data-step="pend-1" onchange="toggleChecklistItem(this)" class="routine-check mt-0.5 w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" />
+                <span class="text-xs sm:text-sm text-slate-800"><strong>1.</strong> Acessar a pasta <strong>Pendentes</strong>.</span>
+              </label>
+              <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors">
+                <input type="checkbox" data-step="pend-2" onchange="toggleChecklistItem(this)" class="routine-check mt-0.5 w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" />
+                <span class="text-xs sm:text-sm text-slate-800"><strong>2 e 3.</strong> Selecionar e reabrir os tickets que estão nessa pasta (ao reabrir, retornarão automaticamente para os respectivos atendentes responsáveis).</span>
+              </label>
+            </div>
+
+            <p class="text-xs text-slate-500 mt-3 italic">
+              Essa etapa garante que os atendentes voltem a visualizar os chamados que precisam de continuidade.
+            </p>
+          </div>
+
+          <!-- STEP 3: Acompanhamento da Planilha de Registros -->
+          <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+            <div class="flex items-center gap-3 mb-3">
+              <div class="w-9 h-9 rounded-xl bg-emerald-600 text-white font-extrabold flex items-center justify-center text-sm shrink-0">
+                3
+              </div>
+              <div>
+                <h3 class="text-base font-extrabold text-slate-900">
+                  Acompanhamento da Planilha de Registros (Contínuo)
+                </h3>
+                <p class="text-xs text-slate-500">
+                  Onde os atendentes registram casos que precisam de acompanhamento ou direcionamento
+                </p>
+              </div>
+            </div>
+
+            <div class="space-y-2.5 mt-4">
+              <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors">
+                <input type="checkbox" data-step="plan-1" onchange="toggleChecklistItem(this)" class="routine-check mt-0.5 w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500" />
+                <span class="text-xs sm:text-sm text-slate-800"><strong>1.</strong> Consultar os novos registros adicionados pelos atendentes na planilha.</span>
+              </label>
+              <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors">
+                <input type="checkbox" data-step="plan-2" onchange="toggleChecklistItem(this)" class="routine-check mt-0.5 w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500" />
+                <span class="text-xs sm:text-sm text-slate-800"><strong>2.</strong> Analisar cada solicitação e <strong>verificar se o registro foi feito na Shopify</strong> (Seção 4).</span>
+              </label>
+              <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors">
+                <input type="checkbox" data-step="plan-3" onchange="toggleChecklistItem(this)" class="routine-check mt-0.5 w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500" />
+                <span class="text-xs sm:text-sm text-slate-800"><strong>3 e 4.</strong> Identificar qual grupo é responsável pelo assunto e encaminhar para o grupo correto.</span>
+              </label>
+              <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors">
+                <input type="checkbox" data-step="plan-4" onchange="toggleChecklistItem(this)" class="routine-check mt-0.5 w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500" />
+                <span class="text-xs sm:text-sm text-slate-800"><strong>5.</strong> Continuar acompanhando a planilha constantemente ao longo do dia para evitar acúmulo de solicitações.</span>
+              </label>
+            </div>
+
+            <div class="mt-3.5 bg-blue-50 border border-blue-200 rounded-xl p-3 text-xs text-blue-900 flex items-start gap-2">
+              <i data-lucide="clock" class="w-4 h-4 text-blue-600 shrink-0 mt-0.5"></i>
+              <span><strong>Importante:</strong> Não basta apenas encaminhar os chamados no início do dia. É necessário acompanhar constantemente a planilha, pois novos registros podem ser adicionados a qualquer momento.</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Column: Section 4 Mandatory Shopify Rule & Interactive Simulator (5 cols) -->
+        <div class="lg:col-span-5 space-y-5">
+          <div class="bg-red-50 border-2 border-red-500 rounded-2xl p-5 shadow-md">
+            <div class="flex items-center gap-2.5">
+              <div class="w-10 h-10 rounded-xl bg-red-600 text-white flex items-center justify-center shrink-0">
+                <i data-lucide="shield-alert" class="w-6 h-6"></i>
+              </div>
+              <div>
+                <span class="text-[11px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded bg-red-600 text-white">
+                  Seção 4 — Regra Obrigatória
+                </span>
+                <h3 class="text-base sm:text-lg font-extrabold text-red-950 mt-0.5">
+                  REGISTRAR TODO CHAMADO NA SHOPIFY
+                </h3>
+              </div>
+            </div>
+
+            <p class="text-xs sm:text-sm text-red-900 mt-3 leading-relaxed">
+              Todo chamado relacionado a um pedido precisa ter as informações e o histórico da conversa registrados nas <strong>observações do respectivo pedido na Shopify</strong>.
+            </p>
+            <p class="text-xs font-bold text-red-950 mt-2">
+              Ao analisar uma solicitação na planilha, é necessário verificar se o atendente realizou esse registro!
+            </p>
+
+            <!-- What to do when missing -->
+            <div class="mt-4 bg-white rounded-xl p-4 border border-red-300 space-y-2.5">
+              <h4 class="text-xs sm:text-sm font-extrabold text-slate-900 flex items-center gap-1.5">
+                <i data-lucide="alert-triangle" class="w-4 h-4 text-red-600"></i>
+                O que fazer quando o comentário NÃO estiver na Shopify?
+              </h4>
+              <ol class="text-xs text-slate-700 space-y-2 list-decimal list-inside">
+                <li>Identificar a linha correspondente ao chamado na planilha.</li>
+                <li>Alterar o status para <span class="px-2 py-0.5 rounded bg-red-600 text-white font-extrabold">ATENÇÃO</span>.</li>
+                <li>A linha ficará <strong>vermelha</strong>, indicando que existe uma pendência.</li>
+                <li>Avisar o atendente responsável que faltou adicionar o comentário nas observações do pedido na Shopify.</li>
+              </ol>
+            </div>
+
+            <!-- Interactive Spreadsheet Row Simulator -->
+            <div class="mt-4 bg-slate-900 text-white rounded-xl p-4">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                  Simulador da Planilha de Registros
+                </span>
+                <span class="text-[11px] text-slate-400">Teste mudar o status abaixo:</span>
+              </div>
+              <div id="simSpreadsheetRow" class="rounded-lg p-3 bg-red-600 text-white transition-all duration-300 border border-red-400">
+                <div class="flex items-center justify-between gap-2 text-xs">
+                  <div>
+                    <div class="font-bold">Pedido #HS-9482 — Atraso na entrega</div>
+                    <div id="simCommentText" class="text-[11px] opacity-90 mt-0.5">
+                      ❌ Sem comentário nas observações da Shopify
+                    </div>
+                  </div>
+                  <select id="simStatusSelect" onchange="updateSimSpreadsheet(this.value)" class="bg-white text-slate-900 font-extrabold text-xs px-2.5 py-1.5 rounded-md focus:outline-none cursor-pointer">
+                    <option value="ATENCAO" selected>ATENÇÃO</option>
+                    <option value="OK">ENCAMINHADO</option>
+                  </select>
+                </div>
+              </div>
+              <div class="mt-3 flex items-center justify-between gap-2">
+                <span class="text-[11px] text-slate-300">Mensagem pronta para cobrar o atendente:</span>
+                <button onclick="copyShopifyWarning()" class="text-xs font-bold bg-red-600 hover:bg-red-500 text-white px-2.5 py-1 rounded-lg transition-colors flex items-center gap-1">
+                  <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                  Copiar Aviso ao Atendente
+                </button>
+              </div>
+            </div>
+
+            <!-- Why is this rule important -->
+            <div class="mt-4 bg-red-100/80 rounded-xl p-3.5 border border-red-200 text-xs text-red-950 space-y-1.5">
+              <div class="font-extrabold flex items-center gap-1.5">
+                <i data-lucide="help-circle" class="w-4 h-4 text-red-700"></i>
+                Por que essa regra é importante?
+              </div>
+              <p>
+                Precisamos manter todas as informações e tudo o que foi conversado sobre o pedido dentro do próprio pedido na Shopify.
+              </p>
+              <p>
+                Dessa forma, qualquer pessoa que precisar consultar o pedido conseguirá entender o que aconteceu, quais informações foram passadas e o que já foi tratado — evitando que o histórico fique perdido apenas nas conversas do atendimento.
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- TAB 4: GUIA COMPLETO & TABELA RESUMO (PARTES 1, 2, 3 e 4)             -->
+    <!-- ===================================================================== -->
+    <section id="tab-guia" class="hidden space-y-6">
+
+      <!-- Section 11: Rapid Summary Table Colored by Group -->
+      <div class="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-md bg-slate-900 text-white">
+              Parte 3 — Seção 11
+            </span>
+            <h2 class="text-lg sm:text-xl font-extrabold text-slate-900 mt-2">
+              Tabela de Resumo Rápido dos Encaminhamentos (Colorida por Grupo)
+            </h2>
+          </div>
+          <button onclick="window.print()" class="no-print self-start sm:self-auto text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-300 px-3.5 py-2 rounded-xl transition-colors flex items-center gap-1.5">
+            <i data-lucide="printer" class="w-4 h-4"></i>
+            Imprimir / Salvar PDF
+          </button>
+        </div>
+
+        <div class="overflow-x-auto rounded-xl border border-slate-200">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-900 text-white text-xs uppercase tracking-wider">
+                <th class="py-3.5 px-4 font-bold">Tipo de Solicitação</th>
+                <th class="py-3.5 px-4 font-bold">Grupo Responsável</th>
+                <th class="py-3.5 px-4 font-bold">Observação / Requisitos ao Encaminhar</th>
+              </tr>
+            </thead>
+            <tbody id="summaryTableBody" class="divide-y divide-slate-200 text-xs sm:text-sm">
+              <!-- Populated dynamically via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Section 13: Cuidados Importantes durante a Rotina -->
+      <div class="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-sm">
+        <span class="text-xs font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-md bg-emerald-100 text-emerald-900">
+          Parte 4 — Seção 13
+        </span>
+        <h3 class="text-lg sm:text-xl font-extrabold text-slate-900 mt-2">
+          13. Cuidados Importantes Durante a Rotina
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
+          <div class="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+            <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5"></i>
+            <span class="text-xs sm:text-sm text-slate-800">Manter a distribuição dos tickets equilibrada entre os atendentes.</span>
+          </div>
+          <div class="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+            <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5"></i>
+            <span class="text-xs sm:text-sm text-slate-800">Não deixar os tickets pendentes sem o devido acompanhamento.</span>
+          </div>
+          <div class="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+            <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5"></i>
+            <span class="text-xs sm:text-sm text-slate-800">Acompanhar a planilha de registros constantemente ao longo do dia.</span>
+          </div>
+          <div class="flex items-start gap-3 p-3.5 rounded-xl bg-red-50 border border-red-200">
+            <i data-lucide="alert-triangle" class="w-5 h-5 text-red-600 shrink-0 mt-0.5"></i>
+            <span class="text-xs sm:text-sm text-red-950 font-medium">Verificar se todos os chamados relacionados a pedidos possuem observações registradas na <strong>Shopify</strong>.</span>
+          </div>
+          <div class="flex items-start gap-3 p-3.5 rounded-xl bg-red-50 border border-red-200">
+            <i data-lucide="alert-triangle" class="w-5 h-5 text-red-600 shrink-0 mt-0.5"></i>
+            <span class="text-xs sm:text-sm text-red-950 font-medium">Quando faltar o comentário na Shopify, alterar o status para <strong>ATENÇÃO</strong> (linha vermelha) e avisar o atendente.</span>
+          </div>
+          <div class="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+            <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5"></i>
+            <span class="text-xs sm:text-sm text-slate-800">Encaminhar cada solicitação para o grupo correto.</span>
+          </div>
+          <div class="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+            <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5"></i>
+            <span class="text-xs sm:text-sm text-slate-800">Ao encaminhar problemas técnicos, sempre incluir uma explicação clara e os prints necessários (e link do chat quando for IA).</span>
+          </div>
+          <div class="flex items-start gap-3 p-3.5 rounded-xl bg-amber-50 border border-amber-200">
+            <i data-lucide="help-circle" class="w-5 h-5 text-amber-600 shrink-0 mt-0.5"></i>
+            <span class="text-xs sm:text-sm text-amber-950 font-medium">Quando uma situação não estiver contemplada neste guia ou houver dúvida sobre como proceder, buscar orientação antes de tomar uma decisão.</span>
+          </div>
+        </div>
+        <div class="mt-4 p-4 rounded-xl bg-slate-900 text-white text-xs sm:text-sm font-medium text-center">
+          🎯 <strong>Objetivo Final:</strong> Manter o atendimento organizado, garantir que as solicitações sejam direcionadas corretamente e evitar que os casos fiquem parados ou sem acompanhamento.
+        </div>
+      </div>
+
+      <!-- Full Text Reading Mode (All 5 Groups Detailed Sections 5 to 10) -->
+      <div class="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-sm space-y-6">
+        <div>
+          <span class="text-xs font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-md bg-blue-100 text-blue-900">
+            Parte 2 — Seções 5 a 10 na Íntegra
+          </span>
+          <h3 class="text-lg sm:text-xl font-extrabold text-slate-900 mt-2">
+            Detalhamento Completo de Cada Grupo dos Quais a Ana Paula Deve Fazer Parte
+          </h3>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4">
+          <!-- 6. Liderança -->
+          <div class="rounded-xl border-l-8 border-blue-600 bg-blue-50/40 p-4 border border-blue-200">
+            <h4 class="text-base font-extrabold text-blue-950">6. LIDERANÇA (Cor Azul)</h4>
+            <p class="text-xs sm:text-sm text-slate-700 mt-1">
+              <strong>Principal grupo de encaminhamento dos assuntos relacionados aos pedidos da loja.</strong> É o grupo que receberá a maior parte das solicitações dos atendentes. Tudo o que estiver relacionado a pedidos realizados na loja deve ser encaminhado para a Liderança. A <strong>Isabella Maia</strong> participa do grupo e poderá contribuir com informações adicionais ou com a resolução dos casos.
+            </p>
+          </div>
+
+          <!-- 7. Coordenação -->
+          <div class="rounded-xl border-l-8 border-purple-600 bg-purple-50/40 p-4 border border-purple-200">
+            <h4 class="text-base font-extrabold text-purple-950">7. COORDENAÇÃO (Cor Roxa)</h4>
+            <p class="text-xs sm:text-sm text-slate-700 mt-1">
+              Utilizado para manter o <strong>Sr. Genésio Filho</strong> informado sobre assuntos gerais do atendimento e solicitações que precisam da avaliação ou orientação da Coordenação: (7.1) Solicitações dos atendentes com resumo claro; (7.2) Reembolso de doações via PIX (Comprovante + Nome + CPF); (7.3) Parcerias e atacado (Resumo + Nome/Empresa + Contato); (7.4) E-mails sem clareza/boletos (aguardar autorização do Sr. Genésio); (7.5) Pessoa que queria comprar produto mas enviou valor como doação (Nome + CPF + Comprovante).
+            </p>
+          </div>
+
+          <!-- 8. Automação Loja Hesed -->
+          <div class="rounded-xl border-l-8 border-emerald-600 bg-emerald-50/40 p-4 border border-emerald-200">
+            <h4 class="text-base font-extrabold text-emerald-950">8. AUTOMAÇÃO LOJA HESED (Cor Verde)</h4>
+            <p class="text-xs sm:text-sm text-slate-700 mt-1">
+              Destinado aos assuntos relacionados à <strong>Inteligência Artificial (IA)</strong> utilizada no atendimento da loja (respostas incorretas, interpretação errada, falhas, comportamentos inesperados, sugestões). <strong>Como encaminhar:</strong> 1. Explicação do que aconteceu + 2. Print da situação + 3. Link do chat em que ocorreu o problema.
+            </p>
+          </div>
+
+          <!-- 9. Implantação / ChatIHS -->
+          <div class="rounded-xl border-l-8 border-amber-500 bg-amber-50/40 p-4 border border-amber-200">
+            <h4 class="text-base font-extrabold text-amber-950">9. IMPLANTAÇÃO / CHAT IHS (Cor Laranja/Âmbar)</h4>
+            <p class="text-xs sm:text-sm text-slate-700 mt-1">
+              Destinado aos problemas e sugestões relacionados ao <strong>OMNI</strong>, que é a plataforma utilizada pelo atendimento (problemas de acesso, plataforma fora do ar, falhas no sistema, melhorias). <strong>Como encaminhar:</strong> 1. Explicação do que aconteceu + 2. Print da falha ou situação identificada.
+            </p>
+          </div>
+
+          <!-- 10. Problemas identificados pelo atendimento -->
+          <div class="rounded-xl border-l-8 border-rose-600 bg-rose-50/40 p-4 border border-rose-200">
+            <h4 class="text-base font-extrabold text-rose-950">10. PROBLEMAS IDENTIFICADOS PELO ATENDIMENTO (Cor Rosa/Vermelha)</h4>
+            <p class="text-xs sm:text-sm text-slate-700 mt-1">
+              Destinado aos problemas e sugestões relacionados às plataformas e ferramentas do Instituto: <strong>(10.1) DOE</strong>, <strong>(10.2) Aplicativo do Instituto</strong>, <strong>(10.3) Site do Instituto</strong> (enviar Explicação + Print da situação) e <strong>(10.4) Reembolso de doações realizadas no cartão de crédito</strong>.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-white border-t border-slate-200 mt-12 py-5 no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+        <span><strong>Guia Operacional — Liderança do Atendimento</strong> • Responsável: Ana Paula</span>
+      </div>
+      <div>
+        Use a busca rápida ou clique nos grupos da legenda para filtrar os chamados por cor.
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL: REGRA OBRIGATÓRIA SHOPIFY                                      -->
+  <!-- ===================================================================== -->
+  <div id="shopifyModal" class="fixed inset-0 z-50 hidden bg-slate-900/70 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 border-2 border-red-500 shadow-2xl space-y-4">
+      <div class="flex items-start justify-between gap-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-10 h-10 rounded-xl bg-red-600 text-white flex items-center justify-center shrink-0">
+            <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <span class="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded bg-red-100 text-red-800">
+              Regra Obrigatória (Seção 4)
+            </span>
+            <h3 class="text-lg font-extrabold text-slate-900">
+              Todo Chamado Deve Estar na Shopify!
+            </h3>
+          </div>
+        </div>
+        <button onclick="closeShopifyModal()" class="text-slate-400 hover:text-slate-600 p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+        Todo chamado relacionado a um pedido precisa ter as informações e o histórico da conversa registrados nas <strong>observações do respectivo pedido na Shopify</strong>.
+      </p>
+
+      <div class="bg-red-50 border border-red-200 rounded-xl p-4 space-y-2">
+        <div class="text-xs font-extrabold text-red-950 uppercase">
+          Passo a passo quando NÃO houver comentário na Shopify:
+        </div>
+        <ol class="text-xs sm:text-sm text-red-900 space-y-1.5 list-decimal list-inside font-medium">
+          <li>Identificar a linha correspondente ao chamado na planilha.</li>
+          <li>Alterar o status para <span class="px-2 py-0.5 rounded bg-red-600 text-white font-bold">ATENÇÃO</span>.</li>
+          <li>A linha ficará <strong>vermelha</strong>, indicando que existe uma pendência.</li>
+          <li>Avisar o atendente responsável que faltou adicionar o comentário nas observações do pedido na Shopify.</li>
+        </ol>
+      </div>
+
+      <div class="flex items-center justify-end gap-2 pt-2">
+        <button onclick="copyShopifyWarning()" class="text-xs font-bold bg-red-600 hover:bg-red-700 text-white px-4 py-2.5 rounded-xl transition-colors flex items-center gap-1.5">
+          <i data-lucide="copy" class="w-4 h-4"></i>
+          Copiar Cobrança para Atendente
+        </button>
+        <button onclick="closeShopifyModal()" class="text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2.5 rounded-xl transition-colors">
+          Entendi
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL: COMO HOSPEDAR NA VERCEL                                        -->
+  <!-- ===================================================================== -->
+  <div id="vercelModal" class="fixed inset-0 z-50 hidden bg-slate-900/70 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 border border-slate-200 shadow-2xl space-y-4">
+      <div class="flex items-start justify-between gap-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shrink-0">
+            <i data-lucide="cloud-upload" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <span class="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded bg-blue-100 text-blue-800">
+              Pronto para Produção
+            </span>
+            <h3 class="text-lg font-extrabold text-slate-900">
+              Como deixar este site no ar na Vercel
+            </h3>
+          </div>
+        </div>
+        <button onclick="closeVercelModal()" class="text-slate-400 hover:text-slate-600 p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <ol class="text-xs sm:text-sm text-slate-700 space-y-2.5 list-decimal list-inside">
+        <li>Salve este arquivo no seu computador com o nome exato de <code class="px-1.5 py-0.5 bg-slate-100 rounded font-bold text-slate-900">index.html</code> dentro de uma pasta (ex: <code class="px-1.5 py-0.5 bg-slate-100 rounded">guia-atendimento</code>).</li>
+        <li>Acesse <strong>vercel.com</strong> (ou suba a pasta em um repositório no GitHub e conecte à Vercel).</li>
+        <li>Como tudo já está contido neste único arquivo <code class="px-1.5 py-0.5 bg-slate-100 rounded font-bold">index.html</code>, o site ficará no ar instantaneamente com link compartilhável para a Ana Paula e toda a equipe!</li>
+      </ol>
+
+      <div class="flex justify-end pt-2">
+        <button onclick="closeVercelModal()" class="text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl transition-colors">
+          Fechar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 hidden bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl border border-slate-700 flex items-center gap-2.5 text-xs sm:text-sm font-semibold">
+    <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+    <span id="toastMessage">Copiado com sucesso!</span>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- APPLICATION LOGIC & DATA                                              -->
+  <!-- ===================================================================== -->
+  <script>
+    // 1. DEFINIÇÃO DE CORES E METADADOS DOS 5 GRUPOS
+    const GROUPS = {
+      LIDERANCA: {
+        id: 'LIDERANCA',
+        number: 'Grupo 1 (Seção 6)',
+        name: 'Liderança',
+        shortDesc: 'Principal grupo para todos os assuntos relacionados aos pedidos e compras da loja (apoio: Isabella Maia).',
+        colorName: 'Azul',
+        icon: 'shopping-bag',
+        hex: '#2563eb',
+        badgeBg: 'bg-blue-600 text-white',
+        softBg: 'bg-blue-50/80',
+        cardBorder: 'border-blue-500',
+        topStripe: 'bg-blue-600',
+        textAccent: 'text-blue-700',
+        pillStyle: 'bg-blue-100 text-blue-900 border-blue-300',
+        legendActiveRing: 'ring-4 ring-blue-500/40 border-blue-600'
+      },
+      COORDENACAO: {
+        id: 'COORDENACAO',
+        number: 'Grupo 2 (Seção 7)',
+        name: 'Coordenação',
+        shortDesc: 'Assuntos para o Sr. Genésio Filho: solicitações de atendentes, reembolso PIX doação, atacado/parcerias, boletos/e-mails sem clareza.',
+        colorName: 'Roxo',
+        icon: 'briefcase',
+        hex: '#7c3aed',
+        badgeBg: 'bg-purple-600 text-white',
+        softBg: 'bg-purple-50/80',
+        cardBorder: 'border-purple-500',
+        topStripe: 'bg-purple-600',
+        textAccent: 'text-purple-700',
+        pillStyle: 'bg-purple-100 text-purple-900 border-purple-300',
+        legendActiveRing: 'ring-4 ring-purple-500/40 border-purple-600'
+      },
+      AUTOMACAO_IA: {
+        id: 'AUTOMACAO_IA',
+        number: 'Grupo 3 (Seção 8)',
+        name: 'Automação Loja Hesed',
+        shortDesc: 'Problemas, falhas de interpretação, respostas incorretas ou sugestões para a Inteligência Artificial (IA) da loja.',
+        colorName: 'Verde',
+        icon: 'bot',
+        hex: '#059669',
+        badgeBg: 'bg-emerald-600 text-white',
+        softBg: 'bg-emerald-50/80',
+        cardBorder: 'border-emerald-500',
+        topStripe: 'bg-emerald-600',
+        textAccent: 'text-emerald-700',
+        pillStyle: 'bg-emerald-100 text-emerald-900 border-emerald-300',
+        legendActiveRing: 'ring-4 ring-emerald-500/40 border-emerald-600'
+      },
+      IMPLANTACAO_OMNI: {
+        id: 'IMPLANTACAO_OMNI',
+        number: 'Grupo 4 (Seção 9)',
+        name: 'Implantação / ChatIHS',
+        shortDesc: 'Quedas, dificuldades de acesso, falhas de funcionamento ou sugestões sobre a plataforma OMNI.',
+        colorName: 'Laranja',
+        icon: 'monitor-smartphone',
+        hex: '#d97706',
+        badgeBg: 'bg-amber-600 text-white',
+        softBg: 'bg-amber-50/80',
+        cardBorder: 'border-amber-500',
+        topStripe: 'bg-amber-500',
+        textAccent: 'text-amber-800',
+        pillStyle: 'bg-amber-100 text-amber-900 border-amber-300',
+        legendActiveRing: 'ring-4 ring-amber-500/40 border-amber-600'
+      },
+      PROBLEMAS_ATENDIMENTO: {
+        id: 'PROBLEMAS_ATENDIMENTO',
+        number: 'Grupo 5 (Seção 10)',
+        name: 'Problemas identificados pelo atendimento',
+        shortDesc: 'Problemas/sugestões no DOE, Aplicativo do Instituto, Site do Instituto + Reembolso de doação no Cartão de Crédito.',
+        colorName: 'Rosa / Vermelho',
+        icon: 'alert-octagon',
+        hex: '#e11d48',
+        badgeBg: 'bg-rose-600 text-white',
+        softBg: 'bg-rose-50/80',
+        cardBorder: 'border-rose-500',
+        topStripe: 'bg-rose-600',
+        textAccent: 'text-rose-700',
+        pillStyle: 'bg-rose-100 text-rose-900 border-rose-300',
+        legendActiveRing: 'ring-4 ring-rose-500/40 border-rose-600'
+      }
+    };
+
+    // 2. BASE DE CHAMADOS COMPLETA (Cobrindo 100% dos casos do Guia Operacional)
+    const TICKETS_DATA = [
+      // ==================== LIDERANÇA (AZUL) ====================
+      {
+        id: 'lid-entrega-rastreio',
+        group: 'LIDERANCA',
+        section: 'Seção 6',
+        title: 'Atrasos na entrega e Problemas com rastreamento',
+        keywords: ['atraso', 'entrega', 'rastreamento', 'rastreio', 'sem atualização', 'transportadora', 'correios', 'demora', 'pedido'],
+        description: 'Quando o pedido está com atraso na entrega, problemas no código de rastreio ou pedido sem atualização no rastreio.',
+        checklist: [
+          'Verificar se o atendente registrou o comentário nas observações do pedido na Shopify.',
+          'Se faltar comentário na Shopify: mudar status na planilha para ATENÇÃO e avisar o atendente.',
+          'Encaminhar para o grupo Liderança (Isabella Maia participa do grupo).'
+        ],
+        copyTemplate: '📦 [LIDERANÇA - Rastreio/Entrega]\nPedido: #\nSituação: Atraso / Rastreio sem atualização\nObservação registrada na Shopify? (Sim)'
+      },
+      {
+        id: 'lid-entregue-nao-recebido',
+        group: 'LIDERANCA',
+        section: 'Seção 6',
+        title: 'Pedido marcado como entregue, mas não recebido / Extraviado / Devolvido',
+        keywords: ['entregue mas não recebido', 'não recebeu', 'extraviado', 'extravio', 'perdido', 'devolvido ao remetente', 'voltou', 'logística'],
+        description: 'Casos em que o rastreio consta como entregue mas o cliente afirma não ter recebido, pedido extraviado ou devolvido ao remetente.',
+        checklist: [
+          'Conferir se todo o histórico da conversa está nas observações do pedido na Shopify.',
+          'Encaminhar imediatamente para o grupo Liderança.'
+        ],
+        copyTemplate: '📦 [LIDERANÇA - Ocorrência de Entrega]\nPedido: #\nSituação: (Entregue e não recebido / Extraviado / Devolvido ao remetente)\nHistórico na Shopify: OK'
+      },
+      {
+        id: 'lid-endereco',
+        group: 'LIDERANCA',
+        section: 'Seção 6',
+        title: 'Alteração ou correção de endereço de entrega',
+        keywords: ['endereço', 'alteração de endereço', 'correção', 'cep', 'número errado', 'mudar endereço', 'rua'],
+        description: 'Solicitações de clientes para corrigir ou alterar o endereço de entrega de um pedido realizado na loja.',
+        checklist: [
+          'Verificar se o novo endereço completo já foi anotado nas observações do pedido na Shopify.',
+          'Encaminhar para o grupo Liderança.'
+        ],
+        copyTemplate: '📍 [LIDERANÇA - Alteração de Endereço]\nPedido: #\nNovo endereço completo informado na Shopify: Sim'
+      },
+      {
+        id: 'lid-duvidas-adicionar-item',
+        group: 'LIDERANCA',
+        section: 'Seção 6',
+        title: 'Dúvidas sobre pedidos ou Solicitação para adicionar item ao pedido',
+        keywords: ['dúvida', 'adicionar item', 'incluir produto', 'juntar pedido', 'compra da loja', 'informação sobre pedido'],
+        description: 'Dúvidas gerais sobre pedidos da loja ou quando o cliente pede para incluir mais algum item no pedido já feito.',
+        checklist: [
+          'Verificar registro nas observações do pedido na Shopify.',
+          'Encaminhar para o grupo Liderança.'
+        ],
+        copyTemplate: '🛒 [LIDERANÇA - Dúvida / Adicionar Item]\nPedido: #\nSolicitação: '
+      },
+      {
+        id: 'lid-danificado-faltando-duplicado',
+        group: 'LIDERANCA',
+        section: 'Seção 6',
+        title: 'Produto danificado, item faltando ou Pedido duplicado',
+        keywords: ['danificado', 'quebrado', 'defeito', 'faltando', 'incompleto', 'pedido duplicado', 'cobrado duas vezes', 'veio errado'],
+        description: 'Cliente recebeu produto avariado/danificado, faltou algum item na caixa ou acabou gerando pedidos duplicados.',
+        checklist: [
+          'Garantir que o relato e evidências estejam registrados nas observações do pedido na Shopify.',
+          'Encaminhar para o grupo Liderança.'
+        ],
+        copyTemplate: '⚠️ [LIDERANÇA - Produto Danificado / Faltando / Duplicado]\nPedido: #\nResumo do ocorrido: '
+      },
+      {
+        id: 'lid-trocas-devolucoes-cancelamentos',
+        group: 'LIDERANCA',
+        section: 'Seção 6',
+        title: 'Cancelamentos de pedidos, Trocas e Devoluções de produtos',
+        keywords: ['cancelamento', 'cancelar compra', 'troca', 'trocar', 'devolução', 'devolver produto', 'desistência', 'arrependimento'],
+        description: 'Solicitações para cancelar compras da loja, realizar trocas ou devoluções de produtos.',
+        checklist: [
+          'Conferir se o motivo e o histórico constam nas observações do pedido na Shopify.',
+          'Encaminhar para o grupo Liderança.'
+        ],
+        copyTemplate: '🔄 [LIDERANÇA - Cancelamento / Troca / Devolução]\nPedido: #\nTipo: (Cancelamento / Troca / Devolução)\nRegistrado na Shopify: Sim'
+      },
+      {
+        id: 'lid-reembolso-loja',
+        group: 'LIDERANCA',
+        section: 'Seções 6 e 12',
+        title: 'Reembolso de COMPRA realizada na loja',
+        keywords: ['reembolso', 'estorno', 'compra da loja', 'devolver dinheiro da compra', 'reembolso loja'],
+        description: 'Quando o cliente solicita o reembolso de uma COMPRA realizada na loja (Atenção: não confundir com reembolso de doações!).',
+        checklist: [
+          'Confirmar que se trata de compra na loja (e não doação PIX ou Cartão).',
+          'Verificar se as observações estão registradas no pedido na Shopify.',
+          'Encaminhar para o grupo Liderança.'
+        ],
+        copyTemplate: '💸 [LIDERANÇA - Reembolso de Compra da Loja]\nPedido: #\nMotivo do reembolso: \nObservação na Shopify: OK'
+      },
+      {
+        id: 'lid-pagamento-integracao',
+        group: 'LIDERANCA',
+        section: 'Seção 6',
+        title: 'Problemas de pagamento de pedidos ou Pedidos não integrados',
+        keywords: ['pagamento', 'não integrados', 'integração', 'pedido não aparece', 'pago mas não aprovou', 'shopify'],
+        description: 'Problemas de pagamento relacionados a compras na loja ou pedidos que foram pagos mas não integraram corretamente.',
+        checklist: [
+          'Conferir registro na Shopify (se o pedido existir) e detalhes do comprovante.',
+          'Encaminhar para o grupo Liderança.'
+        ],
+        copyTemplate: '💳 [LIDERANÇA - Pagamento / Integração de Pedido]\nPedido/Cliente: \nDetalhe: '
+      },
+
+      // ==================== COORDENAÇÃO (ROXO) ====================
+      {
+        id: 'coord-reembolso-pix-doacao',
+        group: 'COORDENACAO',
+        section: 'Seções 7.2 e 12',
+        title: 'Reembolso de DOAÇÃO realizada via PIX',
+        keywords: ['reembolso', 'doação', 'pix', 'estorno pix', 'devolver doação pix', 'genésio'],
+        description: 'Quando uma pessoa solicita o reembolso de uma doação realizada via PIX. Encaminhar para a Coordenação (Sr. Genésio Filho).',
+        checklist: [
+          '1. Solicitar o Comprovante da transação.',
+          '2. Solicitar o Nome do titular.',
+          '3. Solicitar o CPF do titular.',
+          '4. Encaminhar tudo para o grupo Coordenação.'
+        ],
+        copyTemplate: '💜 [COORDENAÇÃO - Reembolso de Doação via PIX]\n• Nome do titular: \n• CPF do titular: \n• Comprovante da transação: (Em anexo)'
+      },
+      {
+        id: 'coord-compra-enviada-como-doacao',
+        group: 'COORDENACAO',
+        section: 'Seção 7.5',
+        title: 'Queria comprar um produto, mas enviou o valor como DOAÇÃO',
+        keywords: ['queria comprar', 'enviou como doação', 'doação por engano', 'comprou mas fez doação', 'pix errado', 'produto como doação'],
+        description: 'Quando a pessoa queria comprar um produto da loja, mas acabou enviando o dinheiro como doação.',
+        checklist: [
+          '1. Solicitar o Nome e o CPF da pessoa.',
+          '2. Solicitar o Comprovante da transação.',
+          '3. Encaminhar o caso para a Coordenação.'
+        ],
+        copyTemplate: '💜 [COORDENAÇÃO - Valor de compra enviado como Doação]\n• Nome: \n• CPF: \n• Comprovante da transação: (Em anexo)\n• Resumo: Cliente desejava comprar na loja, mas enviou como doação.'
+      },
+      {
+        id: 'coord-parcerias-atacado',
+        group: 'COORDENACAO',
+        section: 'Seção 7.3',
+        title: 'Parcerias e compra no Atacado',
+        keywords: ['parceria', 'atacado', 'revenda', 'empresa', 'fornecedor', 'comprar em grande quantidade', 'comercial'],
+        description: 'Quando uma empresa ou pessoa entra em contato demonstrando interesse em parceria ou compra no atacado.',
+        checklist: [
+          '1. Solicitar um resumo da solicitação.',
+          '2. Solicitar o nome da pessoa ou empresa.',
+          '3. Solicitar o contato para retorno.',
+          '4. Encaminhar as informações para a Coordenação.'
+        ],
+        copyTemplate: '🤝 [COORDENAÇÃO - Parceria / Atacado]\n• Nome da pessoa ou empresa: \n• Contato para retorno: \n• Resumo da solicitação: '
+      },
+      {
+        id: 'coord-emails-sem-clareza',
+        group: 'COORDENACAO',
+        section: 'Seção 7.4',
+        title: 'E-mails sem clareza sobre o assunto (Ex: Boletos ou Anexos)',
+        keywords: ['e-mail', 'email sem clareza', 'boleto', 'documento anexado', 'cobrança', 'fornecedor', 'genésio', 'autorização'],
+        description: 'E-mails cujo conteúdo não está claro ou empresas que enviam boletos/documentos anexados sem explicação clara do motivo.',
+        checklist: [
+          '1. Encaminhar para o grupo Coordenação avaliar.',
+          '2. IMPORTANTE: Aguardar a orientação ou autorização do Sr. Genésio Filho antes de tomar qualquer providência.'
+        ],
+        copyTemplate: '📧 [COORDENAÇÃO - E-mail sem clareza / Avaliação]\n• Remetente: \n• Resumo do anexo/conteúdo: \n• Aguardando orientação/autorização do Sr. Genésio.'
+      },
+      {
+        id: 'coord-solicitacoes-atendentes',
+        group: 'COORDENACAO',
+        section: 'Seção 7.1',
+        title: 'Solicitações dos atendentes para avaliação da Coordenação',
+        keywords: ['solicitação de atendente', 'coordenação', 'avaliação', 'orientação', 'genésio', 'assuntos gerais'],
+        description: 'Quando algum atendente apresentar uma solicitação que precise ser levada à avaliação ou orientação da Coordenação.',
+        checklist: [
+          '1. Elaborar um resumo claro da situação.',
+          '2. Evitar encaminhar apenas a conversa inteira sem contextualizar o que está sendo solicitado.',
+          '3. Enviar para o grupo Coordenação.'
+        ],
+        copyTemplate: '📋 [COORDENAÇÃO - Solicitação do Atendimento]\n• Atendente: \n• Resumo claro da situação e do que está sendo solicitado: '
+      },
+
+      // ==================== AUTOMAÇÃO LOJA HESED (VERDE) ====================
+      {
+        id: 'ia-problemas-sugestoes',
+        group: 'AUTOMACAO_IA',
+        section: 'Seção 8',
+        title: 'Problemas ou sugestões relacionados à IA (Inteligência Artificial)',
+        keywords: ['ia', 'inteligência artificial', 'robô', 'bot', 'automação', 'resposta incorreta', 'interpretando errado', 'falha ia', 'hesed'],
+        description: 'Respostas incorretas da IA, IA interpretando o cliente de maneira errada, falhas no atendimento automatizado, comportamentos inesperados ou sugestões.',
+        checklist: [
+          '1. Explicação clara do que aconteceu (quanto mais clara, mais fácil analisar).',
+          '2. Print da situação.',
+          '3. Link do chat em que ocorreu o problema.',
+          '4. Enviar no grupo Automação Loja Hesed.'
+        ],
+        copyTemplate: '🤖 [AUTOMAÇÃO LOJA HESED - Reporte IA]\n1. Explicação do que aconteceu: \n2. Link do chat: \n3. Print da situação: (Em anexo)'
+      },
+
+      // ==================== IMPLANTAÇÃO / CHATIHS (LARANJA) ====================
+      {
+        id: 'omni-problemas-sugestoes',
+        group: 'IMPLANTACAO_OMNI',
+        section: 'Seção 9',
+        title: 'Problemas ou sugestões relacionados ao sistema OMNI',
+        keywords: ['omni', 'chatihs', 'implantação', 'sistema fora do ar', 'acesso', 'plataforma', 'travando', 'erro no sistema', 'login'],
+        description: 'Problemas para acessar o OMNI, plataforma fora do ar, falhas durante a utilização do sistema, problemas de funcionamento ou sugestões de melhoria.',
+        checklist: [
+          '1. Explicação clara do que aconteceu.',
+          '2. Print da falha ou situação identificada.',
+          '3. Enviar no grupo Implantação / ChatIHS (especialmente se impedir o acesso ou prejudicar o atendimento).'
+        ],
+        copyTemplate: '💻 [IMPLANTAÇÃO / CHATIHS - Plataforma OMNI]\n1. Explicação do que aconteceu: \n2. Print da falha: (Em anexo)'
+      },
+
+      // ==================== PROBLEMAS IDENTIFICADOS PELO ATENDIMENTO (ROSA/VERMELHO) ====================
+      {
+        id: 'prob-reembolso-cartao-doacao',
+        group: 'PROBLEMAS_ATENDIMENTO',
+        section: 'Seções 10.4 e 12',
+        title: 'Reembolso de DOAÇÃO realizada no CARTÃO DE CRÉDITO',
+        keywords: ['reembolso', 'cartão de crédito', 'doação cartão', 'estorno cartão', 'cancelar doação cartão'],
+        description: 'Solicitações de reembolso de doações feitas por cartão de crédito. (Não confundir com compras da loja ou doações via PIX!).',
+        checklist: [
+          '1. Confirmar que é uma DOAÇÃO paga via CARTÃO DE CRÉDITO.',
+          '2. Reunir os dados e explicação do caso.',
+          '3. Encaminhar para o grupo Problemas identificados pelo atendimento.'
+        ],
+        copyTemplate: '💳 [PROBLEMAS IDENTIFICADOS - Reembolso Doação Cartão de Crédito]\n• Doador: \n• Detalhes da solicitação de estorno no cartão: '
+      },
+      {
+        id: 'prob-doe',
+        group: 'PROBLEMAS_ATENDIMENTO',
+        section: 'Seção 10.1',
+        title: 'Problemas ou sugestões relacionados ao DOE',
+        keywords: ['doe', 'plataforma doe', 'doação sistema', 'erro no doe', 'instituto'],
+        description: 'Qualquer falha técnica, dificuldade relatada por usuários ou sugestão de melhoria relacionada ao DOE.',
+        checklist: [
+          '1. Explicação do que aconteceu.',
+          '2. Print da situação identificada.',
+          '3. Encaminhar para o grupo Problemas identificados pelo atendimento.'
+        ],
+        copyTemplate: '🏛️ [PROBLEMAS IDENTIFICADOS - Plataforma DOE]\n1. Explicação do que aconteceu: \n2. Print da situação: (Em anexo)'
+      },
+      {
+        id: 'prob-aplicativo',
+        group: 'PROBLEMAS_ATENDIMENTO',
+        section: 'Seção 10.2',
+        title: 'Problemas ou sugestões relacionados ao Aplicativo do Instituto',
+        keywords: ['aplicativo', 'app', 'app do instituto', 'celular', 'erro no aplicativo', 'bug app'],
+        description: 'Problemas identificados no aplicativo do Instituto, como falhas de funcionamento ou sugestões de melhorias.',
+        checklist: [
+          '1. Explicação do que aconteceu.',
+          '2. Print da situação identificada.',
+          '3. Encaminhar para o grupo Problemas identificados pelo atendimento.'
+        ],
+        copyTemplate: '📱 [PROBLEMAS IDENTIFICADOS - Aplicativo do Instituto]\n1. Explicação do que aconteceu: \n2. Print da situação: (Em anexo)'
+      },
+      {
+        id: 'prob-site',
+        group: 'PROBLEMAS_ATENDIMENTO',
+        section: 'Seção 10.3',
+        title: 'Problemas ou sugestões relacionados ao Site do Instituto',
+        keywords: ['site', 'site do instituto', 'página fora do ar', 'link quebrado', 'portal'],
+        description: 'Problemas de funcionamento ou sugestões de melhoria relacionados ao site do Instituto.',
+        checklist: [
+          '1. Explicação do que aconteceu.',
+          '2. Print da situação identificada.',
+          '3. Encaminhar para o grupo Problemas identificados pelo atendimento.'
+        ],
+        copyTemplate: '🌐 [PROBLEMAS IDENTIFICADOS - Site do Instituto]\n1. Explicação do que aconteceu: \n2. Print da situação: (Em anexo)'
+      }
+    ];
+
+    // 3. DADOS DA TABELA RESUMO OFICIAL (Seção 11)
+    const SUMMARY_TABLE_ROWS = [
+      { req: 'Problemas com pedidos da loja', group: 'LIDERANCA', note: 'Verificar histórico na Shopify' },
+      { req: 'Atrasos, rastreio e entregas', group: 'LIDERANCA', note: 'Verificar histórico na Shopify' },
+      { req: 'Alteração de endereço', group: 'LIDERANCA', note: 'Verificar histórico na Shopify' },
+      { req: 'Trocas, devoluções e cancelamentos de compras', group: 'LIDERANCA', note: 'Verificar histórico na Shopify' },
+      { req: 'Reembolso de compra da loja', group: 'LIDERANCA', note: 'Exclusivo compras da loja + Shopify' },
+      { req: 'Problemas de pagamento de pedidos', group: 'LIDERANCA', note: 'Verificar histórico na Shopify' },
+      { req: 'Solicitações dos atendentes', group: 'COORDENACAO', note: 'Enviar resumo claro da situação' },
+      { req: 'Reembolso de doação via PIX', group: 'COORDENACAO', note: 'Pedir Comprovante + Nome + CPF do titular' },
+      { req: 'Parcerias e atacado', group: 'COORDENACAO', note: 'Pedir Resumo + Nome/Empresa + Contato' },
+      { req: 'E-mails sem clareza sobre o assunto', group: 'COORDENACAO', note: 'Aguardar orientação do Sr. Genésio' },
+      { req: 'Compra desejada, mas valor enviado como doação', group: 'COORDENACAO', note: 'Pedir Nome + CPF + Comprovante' },
+      { req: 'Problemas ou sugestões relacionados à IA', group: 'AUTOMACAO_IA', note: 'Explicação + Print + Link do chat' },
+      { req: 'Problemas ou sugestões relacionados ao OMNI', group: 'IMPLANTACAO_OMNI', note: 'Explicação + Print da falha' },
+      { req: 'Problemas ou sugestões relacionados ao DOE', group: 'PROBLEMAS_ATENDIMENTO', note: 'Explicação + Print da situação' },
+      { req: 'Problemas ou sugestões relacionados ao aplicativo', group: 'PROBLEMAS_ATENDIMENTO', note: 'Explicação + Print da situação' },
+      { req: 'Problemas ou sugestões relacionados ao site', group: 'PROBLEMAS_ATENDIMENTO', note: 'Explicação + Print da situação' },
+      { req: 'Reembolso de doação no cartão de crédito', group: 'PROBLEMAS_ATENDIMENTO', note: 'Não confundir com Loja ou PIX' }
+    ];
+
+    // STATE
+    let currentGroupFilter = 'ALL';
+    let currentSearchQuery = '';
+
+    // HELPER: Escape RegExp
+    function escapeRegExp(string) {
+      return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    // HELPER: Highlight Search Text
+    function highlightText(text, query) {
+      if (!query || !query.trim()) return text;
+      const safeQuery = escapeRegExp(query.trim());
+      const regex = new RegExp(`(${safeQuery})`, 'gi');
+      return text.replace(regex, '<mark class="search-highlight">$1</mark>');
+    }
+
+    // RENDER LEGEND (5 COLORED GROUPS)
+    function renderGroupLegend() {
+      const container = document.getElementById('groupLegendContainer');
+      const resetBtn = document.getElementById('btnResetGroupFilter');
+
+      if (currentGroupFilter === 'ALL') {
+        resetBtn.classList.add('hidden');
+        resetBtn.classList.remove('inline-flex');
+      } else {
+        resetBtn.classList.remove('hidden');
+        resetBtn.classList.add('inline-flex');
+      }
+
+      container.innerHTML = Object.values(GROUPS).map(g => {
+        const count = TICKETS_DATA.filter(t => t.group === g.id).length;
+        const isActive = currentGroupFilter === g.id;
+        const isDimmed = currentGroupFilter !== 'ALL' && !isActive;
+
+        return `
+          <button
+            onclick="filterByGroup('${g.id}')"
+            class="text-left rounded-xl p-3.5 border-2 transition-all flex flex-col justify-between ${g.softBg} ${g.cardBorder} ${isActive ? g.legendActiveRing + ' scale-[1.02]' : ''} ${isDimmed ? 'opacity-45 hover:opacity-90' : 'hover:shadow-md'}"
+          >
+            <div>
+              <div class="flex items-center justify-between gap-1.5 mb-2">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[11px] font-extrabold uppercase tracking-wider ${g.badgeBg}">
+                  <i data-lucide="${g.icon}" class="w-3.5 h-3.5"></i>
+                  ${g.colorName}
+                </span>
+                <span class="text-[11px] font-bold px-2 py-0.5 rounded-full border ${g.pillStyle}">
+                  ${count} ${count === 1 ? 'card' : 'cards'}
+                </span>
+              </div>
+              <div class="text-sm font-extrabold text-slate-900 leading-snug">
+                ${g.name}
+              </div>
+              <p class="text-[11px] text-slate-600 mt-1 leading-relaxed">
+                ${g.shortDesc}
+              </p>
+            </div>
+            <div class="mt-3 pt-2 border-t border-slate-200/80 flex items-center justify-between text-[11px] font-bold ${g.textAccent}">
+              <span>${isActive ? '✓ Filtro Ativo (Clique p/ sair)' : 'Filtrar chamados deste grupo'}</span>
+              <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+            </div>
+          </button>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+    }
+
+    // RENDER TICKETS CARDS
+    function renderTickets() {
+      const grid = document.getElementById('ticketsGrid');
+      const emptyState = document.getElementById('emptySearchState');
+      const counterBadge = document.getElementById('resultsCounterBadge');
+
+      const q = currentSearchQuery.trim().toLowerCase();
+
+      const filtered = TICKETS_DATA.filter(item => {
+        const matchesGroup = currentGroupFilter === 'ALL' || item.group === currentGroupFilter;
+        if (!matchesGroup) return false;
+        if (!q) return true;
+
+        const g = GROUPS[item.group];
+        const haystack = [
+          item.title,
+          item.description,
+          item.section,
+          g.name,
+          g.colorName,
+          ...item.keywords,
+          ...item.checklist
+        ].join(' ').toLowerCase();
+
+        return haystack.includes(q);
+      });
+
+      counterBadge.textContent = `${filtered.length} ${filtered.length === 1 ? 'situação encontrada' : 'situações encontradas'}`;
+
+      if (filtered.length === 0) {
+        grid.classList.add('hidden');
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      grid.classList.remove('hidden');
+      emptyState.classList.add('hidden');
+
+      grid.innerHTML = filtered.map(item => {
+        const g = GROUPS[item.group];
+        const highlightedTitle = highlightText(item.title, currentSearchQuery);
+        const highlightedDesc = highlightText(item.description, currentSearchQuery);
+
+        const keywordsHtml = item.keywords.map(kw => {
+          const isMatch = q && kw.toLowerCase().includes(q);
+          return `<span class="text-[11px] px-2 py-0.5 rounded-md border ${isMatch ? 'bg-yellow-200 text-yellow-950 border-yellow-400 font-bold' : 'bg-white text-slate-600 border-slate-200'}">${highlightText(kw, currentSearchQuery)}</span>`;
+        }).join('');
+
+        const checklistHtml = item.checklist.map(step => `
+          <li class="flex items-start gap-2 text-xs text-slate-800">
+            <i data-lucide="check-circle-2" class="w-4 h-4 shrink-0 mt-0.5 ${g.textAccent}"></i>
+            <span>${highlightText(step, currentSearchQuery)}</span>
+          </li>
+        `).join('');
+
+        return `
+          <article class="ticket-card rounded-2xl bg-white border-2 ${g.cardBorder} shadow-sm overflow-hidden flex flex-col justify-between">
+            <div>
+              <!-- Group Colored Header Bar -->
+              <div class="${g.softBg} px-4 py-3 border-b ${g.cardBorder} flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2">
+                  <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-extrabold uppercase tracking-wide shadow-xs ${g.badgeBg}">
+                    <i data-lucide="${g.icon}" class="w-3.5 h-3.5"></i>
+                    <span>Mandar para: ${g.name}</span>
+                  </span>
+                </div>
+                <span class="text-[11px] font-bold text-slate-500 shrink-0">${item.section}</span>
+              </div>
+
+              <!-- Card Body -->
+              <div class="p-4 sm:p-5">
+                <h4 class="text-base font-extrabold text-slate-900 leading-snug">
+                  ${highlightedTitle}
+                </h4>
+                <p class="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed">
+                  ${highlightedDesc}
+                </p>
+
+                <!-- Checklist Box -->
+                <div class="mt-4 rounded-xl ${g.softBg} p-3.5 border border-slate-200/90">
+                  <div class="text-[11px] font-extrabold uppercase tracking-wider ${g.textAccent} mb-2 flex items-center gap-1.5">
+                    <i data-lucide="clipboard-list" class="w-3.5 h-3.5"></i>
+                    <span>O que fazer / O que solicitar:</span>
+                  </div>
+                  <ul class="space-y-1.5">
+                    ${checklistHtml}
+                  </ul>
+                </div>
+
+                <!-- Keywords -->
+                <div class="mt-3.5 flex flex-wrap gap-1">
+                  ${keywordsHtml}
+                </div>
+              </div>
+            </div>
+
+            <!-- Card Footer with Copy Template Action -->
+            <div class="px-4 py-3 bg-slate-50 border-t border-slate-200/80 flex items-center justify-between gap-2">
+              <span class="text-[11px] font-bold ${g.textAccent} flex items-center gap-1">
+                <span class="w-2.5 h-2.5 rounded-full ${g.topStripe}"></span>
+                Cor do Grupo: ${g.colorName}
+              </span>
+              <button
+                onclick="copyTicketTemplate('${item.id}')"
+                class="text-xs font-bold text-slate-700 hover:text-slate-950 bg-white hover:bg-slate-100 border border-slate-300 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 shadow-2xs"
+                title="Copiar modelo pronto para colar no grupo do WhatsApp/Chat"
+              >
+                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                <span>Copiar Modelo de Envio</span>
+              </button>
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+    }
+
+    // RENDER SUMMARY TABLE (SECTION 11)
+    function renderSummaryTable() {
+      const tbody = document.getElementById('summaryTableBody');
+      tbody.innerHTML = SUMMARY_TABLE_ROWS.map(row => {
+        const g = GROUPS[row.group];
+        return `
+          <tr class="${g.softBg} hover:brightness-95 transition-all">
+            <td class="py-3 px-4 font-bold text-slate-900 border-l-4 ${g.cardBorder}">
+              ${row.req}
+            </td>
+            <td class="py-3 px-4">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-extrabold ${g.badgeBg}">
+                <i data-lucide="${g.icon}" class="w-3.5 h-3.5"></i>
+                ${g.name}
+              </span>
+            </td>
+            <td class="py-3 px-4 text-xs font-medium text-slate-700">
+              ${row.note}
+            </td>
+          </tr>
+        `;
+      }).join('');
+      lucide.createIcons();
+    }
+
+    // FILTER BY GROUP
+    function filterByGroup(groupId) {
+      if (currentGroupFilter === groupId) {
+        currentGroupFilter = 'ALL';
+      } else {
+        currentGroupFilter = groupId;
+      }
+      renderGroupLegend();
+      renderTickets();
+    }
+
+    // QUICK SEARCH BUTTONS
+    function quickSearch(term) {
+      const input = document.getElementById('searchInput');
+      input.value = term;
+      currentSearchQuery = term;
+      currentGroupFilter = 'ALL';
+      updateClearButton();
+      renderGroupLegend();
+      renderTickets();
+      input.focus();
+    }
+
+    // CLEAR SEARCH
+    function clearSearch() {
+      const input = document.getElementById('searchInput');
+      input.value = '';
+      currentSearchQuery = '';
+      currentGroupFilter = 'ALL';
+      updateClearButton();
+      renderGroupLegend();
+      renderTickets();
+    }
+
+    function updateClearButton() {
+      const clearBtn = document.getElementById('clearSearchBtn');
+      if (currentSearchQuery.trim().length > 0) {
+        clearBtn.classList.remove('hidden');
+        clearBtn.classList.add('inline-flex');
+      } else {
+        clearBtn.classList.add('hidden');
+        clearBtn.classList.remove('inline-flex');
+      }
+    }
+
+    // TAB NAVIGATION
+    function switchTab(tabName) {
+      const tabs = ['busca', 'reembolsos', 'rotina', 'guia'];
+      tabs.forEach(t => {
+        const section = document.getElementById(`tab-${t}`);
+        const btn = document.getElementById(`tab-btn-${t}`);
+        if (t === tabName) {
+          section.classList.remove('hidden');
+          btn.className = 'tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all whitespace-nowrap bg-blue-600 text-white shadow-sm';
+        } else {
+          section.classList.add('hidden');
+          btn.className = 'tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap text-slate-300 hover:text-white hover:bg-slate-800';
+        }
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      lucide.createIcons();
+    }
+
+    // HIGHLIGHT REFUND BOX IN TAB 2
+    function highlightRefundBox(boxId) {
+      const ids = ['box-ref-loja', 'box-ref-pix', 'box-ref-cartao', 'box-ref-engano'];
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (id === boxId) {
+          el.classList.add('ring-4', 'ring-amber-400', 'scale-[1.01]');
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          el.classList.remove('ring-4', 'ring-amber-400', 'scale-[1.01]');
+        }
+      });
+    }
+
+    // COPY HELPER (Safe for all browsers & iframes)
+    function copyTextToClipboard(text, message = 'Modelo copiado para a área de transferência!') {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        showToast(message);
+      } catch (err) {
+        showToast('Não foi possível copiar automaticamente.');
+      }
+      document.body.removeChild(textarea);
+    }
+
+    function copyTicketTemplate(ticketId) {
+      const ticket = TICKETS_DATA.find(t => t.id === ticketId);
+      if (!ticket) return;
+      copyTextToClipboard(ticket.copyTemplate, `Modelo para "${GROUPS[ticket.group].name}" copiado!`);
+    }
+
+    function copyShopifyWarning() {
+      const msg = `⚠️ Olá! Verifiquei seu registro na planilha, porém faltou adicionar o comentário com o histórico da conversa nas observações do pedido na Shopify. Alterei o status na planilha para ATENÇÃO (linha vermelha). Assim que registrar na Shopify, me avise por favor!`;
+      copyTextToClipboard(msg, 'Mensagem de cobrança da Shopify copiada!');
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMessage');
+      toastMsg.textContent = msg;
+      toast.classList.remove('hidden');
+      setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 3200);
+    }
+
+    // SIMULATOR: SHOPIFY SPREADSHEET ROW
+    function updateSimSpreadsheet(status) {
+      const row = document.getElementById('simSpreadsheetRow');
+      const comment = document.getElementById('simCommentText');
+      if (status === 'ATENCAO') {
+        row.className = 'rounded-lg p-3 bg-red-600 text-white transition-all duration-300 border border-red-400';
+        comment.textContent = '❌ Sem comentário nas observações da Shopify (Linha Vermelha - Pendente)';
+      } else {
+        row.className = 'rounded-lg p-3 bg-emerald-700 text-white transition-all duration-300 border border-emerald-400';
+        comment.textContent = '✅ Comentário verificado nas observações do pedido na Shopify!';
+      }
+    }
+
+    // DAILY CHECKLIST PERSISTENCE (LocalStorage)
+    const STORAGE_KEY = 'guia_ana_paula_checklist_v1';
+
+    function loadChecklistState() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+        const checkboxes = document.querySelectorAll('.routine-check');
+        checkboxes.forEach(cb => {
+          const key = cb.getAttribute('data-step');
+          cb.checked = !!saved[key];
+        });
+        updateRoutineProgressUI();
+      } catch (e) {
+        updateRoutineProgressUI();
+      }
+    }
+
+    function toggleChecklistItem(cb) {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+        const key = cb.getAttribute('data-step');
+        saved[key] = cb.checked;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+      } catch (e) {}
+      updateRoutineProgressUI();
+    }
+
+    function resetRoutineChecklist() {
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+      } catch (e) {}
+      document.querySelectorAll('.routine-check').forEach(cb => (cb.checked = false));
+      updateRoutineProgressUI();
+      showToast('Checklist da rotina diária reiniciado!');
+    }
+
+    function updateRoutineProgressUI() {
+      const checkboxes = document.querySelectorAll('.routine-check');
+      const total = checkboxes.length;
+      let checkedCount = 0;
+      checkboxes.forEach(cb => {
+        if (cb.checked) checkedCount++;
+      });
+      const pct = total > 0 ? Math.round((checkedCount / total) * 100) : 0;
+      document.getElementById('headerProgressText').textContent = `${checkedCount}/${total}`;
+      document.getElementById('headerProgressBar').style.width = `${pct}%`;
+    }
+
+    // MODALS
+    function openShopifyModal() {
+      document.getElementById('shopifyModal').classList.remove('hidden');
+    }
+    function closeShopifyModal() {
+      document.getElementById('shopifyModal').classList.add('hidden');
+    }
+    function openVercelModal() {
+      document.getElementById('vercelModal').classList.remove('hidden');
+    }
+    function closeVercelModal() {
+      document.getElementById('vercelModal').classList.add('hidden');
+    }
+
+    // INITIALIZATION
+    window.addEventListener('DOMContentLoaded', () => {
+      renderGroupLegend();
+      renderTickets();
+      renderSummaryTable();
+      loadChecklistState();
+
+      // Search Input Listener
+      const searchInput = document.getElementById('searchInput');
+      searchInput.addEventListener('input', (e) => {
+        currentSearchQuery = e.target.value;
+        updateClearButton();
+        renderTickets();
+      });
+
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
